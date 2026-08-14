@@ -1,10 +1,14 @@
 """
 PharmaInsight AI — Walk-Forward Forecast Evaluation
 
-Provides rolling-origin evaluation for time-series forecasting.
+Rolling-origin evaluation for time-series forecasting.
 
-No random shuffling.
-No future information leakage.
+Supported model families:
+    - Naive
+    - Seasonal Naive
+    - Moving Average
+    - ETS
+    - SARIMA
 """
 
 from __future__ import annotations
@@ -20,6 +24,22 @@ from ml.forecasting.metrics import (
     evaluate_forecast,
 )
 
+from ml.forecasting.statistical import (
+    generate_statistical_forecasts,
+)
+
+
+BASELINE_MODELS = {
+    "Naive",
+    "Seasonal Naive",
+    "Moving Average",
+}
+
+STATISTICAL_MODELS = {
+    "ETS",
+    "SARIMA",
+}
+
 
 def walk_forward_baseline_evaluation(
     series: pd.Series,
@@ -30,36 +50,10 @@ def walk_forward_baseline_evaluation(
     seasonal_period: int = 7,
 ) -> pd.DataFrame:
     """
-    Evaluate a baseline model using rolling-origin validation.
+    Walk-forward evaluation for baseline and statistical models.
 
-    Parameters
-    ----------
-    series:
-        Chronologically ordered demand series.
-
-    model_name:
-        One of:
-            Naive
-            Seasonal Naive
-            Moving Average
-
-    initial_train_size:
-        Number of observations used for the first training window.
-
-    horizon:
-        Number of future observations predicted per fold.
-
-    step_size:
-        Number of observations by which the origin moves.
-        Defaults to horizon.
-
-    seasonal_period:
-        Seasonal period for seasonal models and MASE.
-
-    Returns
-    -------
-    pandas.DataFrame
-        Metrics for every walk-forward fold.
+    No random shuffling.
+    No future information leakage.
     """
 
     if not isinstance(series, pd.Series):
@@ -68,7 +62,14 @@ def walk_forward_baseline_evaluation(
     values = pd.to_numeric(
         series,
         errors="coerce",
-    ).dropna().reset_index(drop=True)
+    )
+
+    values = (
+        values
+        .replace([np.inf, -np.inf], np.nan)
+        .dropna()
+        .reset_index(drop=True)
+    )
 
     if step_size is None:
         step_size = horizon
@@ -89,13 +90,18 @@ def walk_forward_baseline_evaluation(
             "step_size must be positive."
         )
 
-    if (
-        initial_train_size + horizon
-        > len(values)
-    ):
+    if initial_train_size + horizon > len(values):
         raise ValueError(
             "Not enough observations for the requested "
             "initial training size and horizon."
+        )
+
+    if (
+        model_name not in BASELINE_MODELS
+        and model_name not in STATISTICAL_MODELS
+    ):
+        raise ValueError(
+            f"Unknown model: {model_name}"
         )
 
     records = []
@@ -105,31 +111,44 @@ def walk_forward_baseline_evaluation(
 
     while train_end + horizon <= len(values):
 
-        train = values.iloc[
-            :train_end
-        ]
+        train = values.iloc[:train_end]
 
         actual = values.iloc[
-            train_end:
-            train_end + horizon
+            train_end:train_end + horizon
         ].to_numpy()
 
-        forecasts = generate_baseline_forecasts(
-            training_series=train,
-            horizon=horizon,
-            seasonal_period=seasonal_period,
-        )
+        # --------------------------------------------------
+        # Generate forecast
+        # --------------------------------------------------
 
-        if model_name not in forecasts:
-            raise ValueError(
-                f"Unknown model: {model_name}. "
-                f"Available models: "
-                f"{list(forecasts.keys())}"
+        if model_name in BASELINE_MODELS:
+
+            forecasts = generate_baseline_forecasts(
+                training_series=train,
+                horizon=horizon,
+                seasonal_period=seasonal_period,
             )
 
-        prediction = forecasts[
-            model_name
-        ]
+            prediction = forecasts[model_name]
+
+        elif model_name in STATISTICAL_MODELS:
+
+            forecasts = generate_statistical_forecasts(
+                training_series=train,
+                horizon=horizon,
+                seasonal_period=seasonal_period,
+            )
+
+            prediction = forecasts[model_name]
+
+        else:
+            raise RuntimeError(
+                "Unsupported model."
+            )
+
+        # --------------------------------------------------
+        # Evaluate
+        # --------------------------------------------------
 
         metrics = evaluate_forecast(
             actual=actual,
@@ -169,15 +188,8 @@ def summarize_walk_forward_results(
         "MASE",
     ]
 
-    summary = (
+    return (
         fold_results
         .groupby("model")[metric_columns]
-        .agg(
-            [
-                "mean",
-                "std",
-            ]
-        )
+        .agg(["mean", "std"])
     )
-
-    return summary
