@@ -1,0 +1,2 @@
+total_categories,flagged_categories,forecast_horizon_days,total_forecast_demand,total_recent_30d_demand,overall_change_pct,best_mase_category,best_mase_model,model_counts
+8,2,30,1879.703586957262,1978.361666667,-4.986857629320633,N02BA,SARIMA,LightGBM: 3; SARIMA: 5
