@@ -1,111 +1,443 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+/* =========================================================
+   DARK THEME — DEFAULT
+   ========================================================= */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  font-family: "DM Sans", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  color-scheme: dark;
+
+  /* Backgrounds */
+  --app-bg: #090a0f;
+  --sidebar-bg: #0b0c13;
+  --panel-bg: #101118;
+  --panel-bg-hover: #151621;
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --text-primary: #f4f5f8;
+  --text-secondary: #a0a1ad;
+  --text-muted: #737582;
+
+  /* Brand */
+  --accent: #8b5cf6;
+  --accent-soft: rgba(139, 92, 246, 0.12);
+  --accent-border: rgba(139, 92, 246, 0.35);
+
+  /* Semantic */
+  --positive: #38d996;
+  --negative: #ff647c;
+  --warning: #fdb022;
+
+  /* Charts */
+  --chart-line: #8b5cf6;
+  --chart-grid: rgba(255, 255, 255, 0.14);
+  --chart-axis: #858694;
+
+  /* Tooltip */
+  --tooltip-background: #15151f;
+  --tooltip-border: rgba(255, 255, 255, 0.14);
+  --tooltip-text: #ffffff;
+
+  /* Shadow */
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Backgrounds */
+  --app-bg: #f5f6fa;
+  --sidebar-bg: #ffffff;
+  --panel-bg: #ffffff;
+  --panel-bg-hover: #f8f8fc;
+
+  /* Borders */
+  --border: rgba(20, 20, 35, 0.10);
+  --border-strong: rgba(20, 20, 35, 0.16);
+
+  /* Text */
+  --text-primary: #171722;
+  --text-secondary: #5f6170;
+  --text-muted: #858795;
+
+  /* Brand */
+  --accent: #7048e8;
+  --accent-soft: rgba(112, 72, 232, 0.10);
+  --accent-border: rgba(112, 72, 232, 0.28);
+
+  /* Semantic */
+  --positive: #15966a;
+  --negative: #dc4660;
+  --warning: #c97800;
+
+  /* Charts */
+  --chart-line: #7048e8;
+  --chart-grid: rgba(30, 30, 50, 0.12);
+  --chart-axis: #737582;
+
+  /* Tooltip */
+  --tooltip-background: #ffffff;
+  --tooltip-border: rgba(20, 20, 35, 0.14);
+  --tooltip-text: #171722;
+
+  /* Shadow */
+  --shadow: 0 4px 18px rgba(25, 25, 45, 0.06);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
   box-sizing: border-box;
 }
 
-body {
+html,
+body,
+#root {
   margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+html {
+  background: var(--app-bg);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+
+  background: var(--app-bg);
+  color: var(--text-primary);
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+#root {
+  min-height: 100vh;
+  background: var(--app-bg);
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+body,
+button,
+select,
+input,
+textarea {
+  font-family: "DM Sans", sans-serif;
 }
 
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text-primary);
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
+button,
+select {
+  font: inherit;
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+button {
+  -webkit-tap-highlight-color: transparent;
 }
+
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app-shell {
+  min-height: 100vh;
+  background: var(--app-bg);
+  color: var(--text-primary);
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.main-content {
+  background: var(--app-bg);
+  color: var(--text-primary);
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+  background: var(--sidebar-bg);
+  border-color: var(--border);
+  color: var(--text-primary);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+
+/* =========================================================
+   PANELS / CARDS
+   ========================================================= */
+
+.panel,
+.kpi-card,
+.hero {
+  background: var(--panel-bg);
+  border-color: var(--border);
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-primary);
+}
+
 p {
-  margin: 0;
+  color: var(--text-secondary);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+.eyebrow,
+.panel-label,
+.hero-label {
+  color: var(--text-muted);
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+table {
+  color: var(--text-primary);
+}
+
+th,
+td {
+  border-color: var(--border);
+}
+
+th {
+  color: var(--text-muted);
+}
+
+td {
+  color: var(--text-secondary);
+}
+
+td strong {
+  color: var(--text-primary);
+}
+
+tbody tr:hover {
+  background: var(--panel-bg-hover);
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+select {
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+
+select option {
+  background: var(--panel-bg);
+  color: var(--text-primary);
+}
+
+
+/* =========================================================
+   THEME TOGGLE
+   ========================================================= */
+
+.theme-toggle {
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-width: 82px;
+  padding: 8px 12px;
+
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+
+  background: var(--panel-bg);
+  color: var(--text-primary);
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.theme-toggle:hover {
+  background: var(--panel-bg-hover);
+  border-color: var(--accent-border);
+}
+
+
+/* =========================================================
+   REFRESH BUTTON
+   ========================================================= */
+
+.refresh-button {
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.refresh-button:hover {
+  background: var(--panel-bg-hover);
+  border-color: var(--accent-border);
+}
+
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+.chart,
+.large-chart {
+  color: var(--text-primary);
+}
+
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.alert-item,
+.large-alert {
+  background: var(--panel-bg);
+  border-color: var(--border);
+  color: var(--text-primary);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.alert-item:hover,
+.large-alert:hover {
+  background: var(--panel-bg-hover);
+}
+
+.alert-content p,
+.large-alert p {
+  color: var(--text-secondary);
+}
+
+
+/* =========================================================
+   SEMANTIC COLORS
+   ========================================================= */
+
+.positive {
+  color: var(--positive) !important;
+}
+
+.negative {
+  color: var(--negative) !important;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.status-badge.ok {
+  color: var(--positive);
+  background: rgba(56, 217, 150, 0.10);
+}
+
+.status-badge.warning {
+  color: var(--negative);
+  background: rgba(255, 100, 124, 0.10);
+}
+
+
+/* =========================================================
+   SMOOTH THEME TRANSITION
+   ========================================================= */
+
+body,
+#root,
+.app-shell,
+.main-content,
+.sidebar,
+.panel,
+.kpi-card,
+.hero,
+.alert-item,
+.large-alert,
+.theme-toggle,
+.refresh-button,
+select {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
 }
