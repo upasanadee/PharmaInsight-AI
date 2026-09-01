@@ -1,16 +1,15 @@
 {
   "name": "PharmaInsight AI",
-
   "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
-
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "24"
     }
   },
-
-  "forwardPorts": [5173, 8000],
-
+  "forwardPorts": [
+    5173,
+    8000
+  ],
   "portsAttributes": {
     "5173": {
       "label": "PharmaInsight Frontend",
@@ -21,9 +20,6 @@
       "onAutoForward": "notify"
     }
   },
-
-  "postCreateCommand": "python -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r requirements.txt && cd frontend && npm install",
-
   "customizations": {
     "vscode": {
       "extensions": [

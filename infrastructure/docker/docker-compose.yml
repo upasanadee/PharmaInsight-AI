@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.backend
+    container_name: pharmainsight-backend
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.frontend
+    container_name: pharmainsight-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
