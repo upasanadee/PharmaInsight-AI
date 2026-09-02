@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import {
   AlertTriangle,
@@ -141,7 +141,7 @@ function App() {
    * ---------------------------------------------------------
    */
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setRefreshing(true);
 
@@ -171,7 +171,7 @@ function App() {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [selectedCategory]);
 
   const loadForecast = async (category: string) => {
     if (!category) {
@@ -192,7 +192,7 @@ function App() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   useEffect(() => {
     if (selectedCategory) {
