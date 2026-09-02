@@ -4,9 +4,11 @@ from backend.app.main import app
 
 client = TestClient(app)
 
+API_PREFIX = "/api/v1"
+
 
 def test_health():
-    response = client.get("/health")
+    response = client.get(f"{API_PREFIX}/health")
 
     assert response.status_code == 200
 
@@ -18,7 +20,7 @@ def test_health():
 
 
 def test_dashboard_summary():
-    response = client.get("/dashboard/summary")
+    response = client.get(f"{API_PREFIX}/dashboard/summary")
 
     assert response.status_code == 200
 
@@ -40,7 +42,7 @@ def test_dashboard_summary():
 
 
 def test_categories():
-    response = client.get("/categories")
+    response = client.get(f"{API_PREFIX}/categories")
 
     assert response.status_code == 200
 
@@ -63,21 +65,23 @@ def test_categories():
 
 
 def test_unknown_category_returns_404():
-    response = client.get("/categories/__definitely_not_a_real_category__")
+    response = client.get(
+        f"{API_PREFIX}/categories/definitely_not_a_real_category"
+    )
 
     assert response.status_code == 404
 
 
 def test_unknown_forecast_returns_404():
     response = client.get(
-        "/forecasts/__definitely_not_a_real_category__"
+        f"{API_PREFIX}/forecasts/definitely_not_a_real_category"
     )
 
     assert response.status_code == 404
 
 
 def test_alerts():
-    response = client.get("/alerts")
+    response = client.get(f"{API_PREFIX}/alerts")
 
     assert response.status_code == 200
 
@@ -87,7 +91,7 @@ def test_alerts():
 
 
 def test_model_performance():
-    response = client.get("/model-performance")
+    response = client.get(f"{API_PREFIX}/model-performance")
 
     assert response.status_code == 200
 
