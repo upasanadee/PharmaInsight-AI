@@ -1,0 +1,30 @@
+name: Kubernetes Validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    name: Validate Kubernetes manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Validate Kubernetes manifests
+        run: |
+          kubectl apply --dry-run=client \
+            -f infrastructure/kubernetes/namespace.yaml
+
+          kubectl apply --dry-run=client \
+            -f infrastructure/kubernetes/backend.yaml
+
+          kubectl apply --dry-run=client \
+            -f infrastructure/kubernetes/frontend.yaml
