@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pharmainsight-backend
+  namespace: pharmainsight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pharmainsight-backend
+  template:
+    metadata:
+      labels:
+        app: pharmainsight-backend
+    spec:
+      containers:
+        - name: backend
+          image: pharmainsight-backend:ci
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pharmainsight-backend
+  namespace: pharmainsight
+spec:
+  selector:
+    app: pharmainsight-backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP
