@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: pharmainsight-backend:ci
+          image: ghcr.io/upasanadee/pharmainsight-backend:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
