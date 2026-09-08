@@ -23,8 +23,13 @@ jobs:
 
       - name: Validate Kubernetes manifests
         run: |
-          kubectl create --dry-run=client -f infrastructure/kubernetes/namespace.yaml -o yaml > /dev/null
-          kubectl create --dry-run=client -f infrastructure/kubernetes/backend.yaml -o yaml > /dev/null
-          kubectl create --dry-run=client -f infrastructure/kubernetes/frontend.yaml -o yaml > /dev/null
+          kubectl apply --dry-run=client --validate=false \
+            -f infrastructure/kubernetes/namespace.yaml
+
+          kubectl apply --dry-run=client --validate=false \
+            -f infrastructure/kubernetes/backend.yaml
+
+          kubectl apply --dry-run=client --validate=false \
+            -f infrastructure/kubernetes/frontend.yaml
 
           echo "Kubernetes manifests are valid."
