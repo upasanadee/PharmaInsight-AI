@@ -15,21 +15,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install kubectl
+      - name: Install kubeconform
         run: |
-          curl -fsSL -o kubectl https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/kubectl
+          curl -fsSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz \
+            | tar -xz
+          sudo mv kubeconform /usr/local/bin/kubeconform
 
       - name: Validate Kubernetes manifests
         run: |
-          kubectl apply --dry-run=client --validate=false \
-            -f infrastructure/kubernetes/namespace.yaml
-
-          kubectl apply --dry-run=client --validate=false \
-            -f infrastructure/kubernetes/backend.yaml
-
-          kubectl apply --dry-run=client --validate=false \
-            -f infrastructure/kubernetes/frontend.yaml
-
-          echo "Kubernetes manifests are valid."
+          kubeconform -strict \
+            infrastructure/kubernetes/namespace.yaml \
+            infrastructure/kubernetes/backend.yaml \
+            infrastructure/kubernetes/frontend.yaml
