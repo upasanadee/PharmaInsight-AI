@@ -11,6 +11,9 @@ from backend.app.api.alerts import router as alerts_router
 from backend.app.api.dashboard import router as dashboard_router
 from backend.app.api.forecasts import router as forecasts_router
 from backend.app.api.models import router as models_router
+from backend.app.api.intelligence import router as intelligence_router
+from backend.app.api.assistant import router as assistant_router
+from backend.app.api.recommendations import router as recommendations_router
 from backend.app.core.config import (
     ALLOWED_ORIGINS,
     API_PREFIX,
@@ -42,6 +45,7 @@ app.include_router(
     tags=["Dashboard"],
 )
 
+
 app.include_router(
     forecasts_router,
     prefix=API_PREFIX,
@@ -59,6 +63,11 @@ app.include_router(
     prefix=API_PREFIX,
     tags=["Alerts"],
 )
+app.include_router(
+    assistant_router,
+    prefix=API_PREFIX,
+    tags=["Assistant"],
+)
 
 
 @app.get("/health")
@@ -75,3 +84,6 @@ def root() -> dict[str, str]:
         "version": "1.0.0",
         "status": "running",
     }
+
+app.include_router(intelligence_router, prefix=API_PREFIX, tags=["Intelligence"])
+app.include_router(recommendations_router, prefix=API_PREFIX, tags=["Recommendations"])

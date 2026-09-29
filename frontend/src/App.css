@@ -1310,3 +1310,56 @@ select:focus-visible {
     font-size: 23px;
   }
 }
+/* =========================================================
+   FORECAST INTELLIGENCE
+   ========================================================= */
+
+.intelligence-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.intelligence-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+.intelligence-card.low {
+  border-left: 3px solid var(--border);
+}
+
+.intelligence-card.medium {
+  border-left: 3px solid var(--warning);
+}
+
+.intelligence-card.high {
+  border-left: 3px solid var(--negative);
+}
+
+.intelligence-card .status-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.intelligence-card.low .status-badge {
+  background: var(--surface-muted);
+  color: var(--text-secondary);
+}
+
+.intelligence-card.medium .status-badge {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.intelligence-card.high .status-badge {
+  background: var(--negative-soft);
+  color: var(--negative);
+}

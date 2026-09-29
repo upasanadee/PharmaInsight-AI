@@ -1,0 +1,9 @@
+category,risk_level,risk_score,demand_regime,forecast_change_pct,MASE,priority,recommendation,reason
+N05C,HIGH,7,Intermittent,99.29606395836248,0.9604502239012316,HIGH,Review recent sales and inventory before replenishment decisions.,"Demand is intermittent and highly variable, with a large forecast increase relative to recent demand."
+R03,HIGH,5,Intermittent,-5.106513356076037,0.9362294123673346,HIGH,Review demand history and inventory levels before planning replenishment.,"Demand is intermittent and highly variable, increasing uncertainty around the forecast."
+R06,LOW,2,Seasonal,-28.38961731025237,0.8629286075664493,MEDIUM,Monitor demand and inventory because the forecast is materially below recent demand.,The forecast is 28.4% below recent demand and the forecast error remains elevated (MASE 0.86).
+M01AB,LOW,0,Regular,12.73126294988498,0.7615473992627889,LOW,Continue routine demand and forecast monitoring.,The forecast is broadly aligned with recent demand and has low forecast risk.
+M01AE,LOW,0,Seasonal,-0.7277702533811548,0.7608136622854974,LOW,Continue routine monitoring with attention to seasonal demand patterns.,The category exhibits a recurring seasonal demand pattern.
+N02BE,LOW,0,Seasonal,-10.021579234165989,0.6920226407847979,LOW,Continue routine monitoring with attention to seasonal demand patterns.,The category exhibits a recurring seasonal demand pattern.
+N05B,LOW,0,Regular,5.195034554613875,0.6807796056366073,LOW,Continue routine demand and forecast monitoring.,The forecast is broadly aligned with recent demand and has low forecast risk.
+N02BA,LOW,0,Seasonal,-4.9599718900245175,0.634635689522933,LOW,Continue routine monitoring with attention to seasonal demand patterns.,The category exhibits a recurring seasonal demand pattern.

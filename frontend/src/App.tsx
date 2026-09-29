@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
+
 import {
   AlertTriangle,
   BarChart3,
   Bell,
+  Bot,
   ChevronRight,
   LayoutDashboard,
   Moon,
@@ -23,6 +25,7 @@ import {
   YAxis,
 } from "recharts";
 import "./App.css";
+import Assistant from "./pages/Assistant";
 
 type Theme = "dark" | "light";
 
@@ -79,6 +82,21 @@ type Alert = {
   forecast_max: number;
 };
 
+type Intelligence = {
+  category: string;
+  risk_level: string;
+  risk_score: number;
+  demand_regime: string;
+  risk_factors: {
+    factor: string;
+    points: number;
+    evidence: string;
+  }[];
+  headline: string;
+  explanation: string;
+  recommended_action: string;
+};
+
 const api = axios.create({
   baseURL: "/api/v1",
 });
@@ -111,6 +129,8 @@ function App() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [models, setModels] = useState<ModelPerformance[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [intelligence, setIntelligence] = useState<Intelligence[]>([]);
+  
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [forecast, setForecast] = useState<ForecastPoint[]>([]);
@@ -150,17 +170,20 @@ function App() {
         categoriesRes,
         modelsRes,
         alertsRes,
+        intelligenceRes,
       ] = await Promise.all([
         api.get<Summary>("/dashboard/summary"),
         api.get<Category[]>("/categories"),
         api.get<ModelPerformance[]>("/model-performance"),
         api.get<Alert[]>("/alerts"),
+        api.get<Intelligence[]>("/intelligence"),
       ]);
 
       setSummary(summaryRes.data);
       setCategories(categoriesRes.data);
       setModels(modelsRes.data);
       setAlerts(alertsRes.data);
+      setIntelligence(intelligenceRes.data);
 
       if (!selectedCategory && categoriesRes.data.length > 0) {
         setSelectedCategory(categoriesRes.data[0].category);
@@ -382,6 +405,15 @@ function App() {
                 {alerts.length}
               </span>
             )}
+          </button>
+          <button
+            className={
+              page === "assistant" ? "active" : ""
+            }
+            onClick={() => setPage("assistant")}
+          >
+            <Bot size={18} />
+            AI Assistant
           </button>
         </nav>
 
@@ -1376,8 +1408,79 @@ function App() {
                 </article>
               ))}
             </div>
+
+            <div style={{ marginTop: "32px" }}>
+              <div className="panel-header">
+                <div>
+                  <span className="panel-label">
+                    AI-DRIVEN ANALYSIS
+                  </span>
+
+                  <h3>
+                    Forecast intelligence
+                  </h3>
+                </div>
+
+                <span className="alert-count">
+                  {intelligence.length} categories analyzed
+                </span>
+              </div>
+
+              <div className="alert-grid">
+                {intelligence.map((item) => (
+                  <article
+                    className={`intelligence-card ${item.risk_level.toLowerCase()}`}
+                    key={item.category}
+                  >
+                    <div className="large-alert-header">
+                      <div className="alert-icon">
+                        <AlertTriangle size={20} />
+                      </div>
+
+                      <div>
+                        <h3>
+                          {item.category}
+                        </h3>
+
+                        <span className="status-badge">
+                          {item.risk_level}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p>
+                      <strong>{item.headline}</strong>
+                      <br />
+                      {item.explanation}
+                    </p>
+
+                    <div className="alert-metrics">
+                      <div>
+                        <span>Risk score</span>
+                        <strong>
+                          {item.risk_score}
+                        </strong>
+                      </div>
+
+                      <div>
+                        <span>Demand regime</span>
+                        <strong>
+                          {item.demand_regime}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <p>
+                      <strong>Recommended action:</strong>{" "}
+                      {item.recommended_action}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
           </section>
         )}
+        {page === "assistant" && <Assistant />}
       </main>
     </div>
   );
