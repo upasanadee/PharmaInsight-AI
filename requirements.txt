@@ -94,3 +94,10 @@ wheel==0.48.0
 xgboost==3.4.0
 pytest
 httpx2
+
+# LangGraph agent workflow
+langchain==1.4.3
+langchain-core==1.6.6
+langchain-openai==1.6.6
+langgraph==1.2.12
+langsmith==0.14.1
